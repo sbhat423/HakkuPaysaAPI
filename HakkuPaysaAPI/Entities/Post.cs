@@ -9,6 +9,8 @@ namespace HakkuPaysaAPI.Entities
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public string User { get; set; }
         public string Summary { get; set; }
+        public string Pic { get; set; }
     }
 }

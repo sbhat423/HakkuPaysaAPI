@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HakkuPaysaAPI.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace HakkuPaysaAPI.Controllers
@@ -25,19 +26,15 @@ namespace HakkuPaysaAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
-            var res = _dbContext.Posts.ToList();
+            var res = await _dbContext.Posts.ToListAsync();
             return Ok(res);
         }
 
         [HttpPost]
-        public async Task CreatePost()
+        public async Task CreatePost([FromBody] Post post)
         {
-            await _dbContext.AddAsync<Post>(new Post()
-            {
-                Id = new Guid(),
-                Title = "asfdsafd",
-                Summary = "sadfdfa"
-            });
+            post.Id = new Guid();
+            await _dbContext.AddAsync<Post>(post);
             await _dbContext.SaveChangesAsync();
         }
     }

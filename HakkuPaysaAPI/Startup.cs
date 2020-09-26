@@ -27,6 +27,13 @@ namespace HakkuPaysaAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("DefaultPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddEntityFrameworkCosmos();
             services.AddDbContext<HPDbContext>(options => options.UseCosmos(
                     Configuration["CosmosDb:EndpointUrl"],
@@ -46,6 +53,8 @@ namespace HakkuPaysaAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("DefaultPolicy");
 
             app.UseRouting();
 

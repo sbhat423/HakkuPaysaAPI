@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Cosmos;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using HakkuPaysaAPI.Services.FileStorage;
 
 namespace HakkuPaysaAPI
 {
@@ -41,6 +42,7 @@ namespace HakkuPaysaAPI
                     Configuration["CosmosDb:DbName"]
                 )
             );
+            services.AddScoped<IFileStorageService, AzureStorageService>();
             services.AddControllers();
         }
         

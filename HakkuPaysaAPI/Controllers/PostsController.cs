@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HakkuPaysaAPI.Entities;
+using HakkuPaysaAPI.Services.FileStorage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,12 +16,13 @@ namespace HakkuPaysaAPI.Controllers
     {
         private readonly ILogger<PostsController> _logger;
         private readonly HPDbContext _dbContext;
+        private readonly IFileStorageService _fileStorageService;
 
-        public PostsController(ILogger<PostsController> logger, HPDbContext dbContext)
+        public PostsController(ILogger<PostsController> logger, HPDbContext dbContext, IFileStorageService fileStorageService)
         {
             _logger = logger;
             _dbContext = dbContext;
-            // CreatePost();
+            _fileStorageService = fileStorageService;
         }
 
         [HttpGet]

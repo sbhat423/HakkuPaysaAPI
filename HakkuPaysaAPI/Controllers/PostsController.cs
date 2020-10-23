@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using HakkuPaysaAPI.Entities;
 using HakkuPaysaAPI.Services.FileStorage;
@@ -36,6 +37,18 @@ namespace HakkuPaysaAPI.Controllers
         public async Task CreatePost([FromBody] Post post)
         {
             post.Id = new Guid();
+            if (!string.IsNullOrWhiteSpace(post.Pic)) 
+            {
+                try
+                {
+                    var path = await _fileStorageService.SaveFile(Convert.FromBase64String(post.Pic), "png", "posts");
+                    post.Pic = path;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message, ex);
+                }
+            }
             await _dbContext.AddAsync<Post>(post);
             await _dbContext.SaveChangesAsync();
         }

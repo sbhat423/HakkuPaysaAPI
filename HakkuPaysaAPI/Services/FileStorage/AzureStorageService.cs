@@ -17,7 +17,7 @@ namespace HakkuPaysaAPI.Services.FileStorage
 
         public AzureStorageService(IConfiguration configuration)
         {
-            connectionString = configuration.GetConnectionString("AzureStorageConnection");
+            connectionString = configuration["AzureStorageConnection"];
         }
         public async Task DeleteFile(string fileRoute, string containerName)
         {

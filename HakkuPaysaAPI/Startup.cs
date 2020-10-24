@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using HakkuPaysaAPI.Services.FileStorage;
+using HakkuPaysaAPI.Database;
+using Microsoft.AspNetCore.Identity;
 
 namespace HakkuPaysaAPI
 {
@@ -34,6 +36,11 @@ namespace HakkuPaysaAPI
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
+            services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("authConnectionString")));
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AuthDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddEntityFrameworkCosmos();
             services.AddDbContext<HPDbContext>(options => options.UseCosmos(

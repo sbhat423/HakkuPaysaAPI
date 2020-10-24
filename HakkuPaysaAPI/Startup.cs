@@ -15,6 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using HakkuPaysaAPI.Services.FileStorage;
 using HakkuPaysaAPI.Database;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace HakkuPaysaAPI
 {
@@ -37,10 +40,22 @@ namespace HakkuPaysaAPI
                        .AllowAnyHeader();
             }));
 
+            // Auth related configuration
             services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("authConnectionString")));
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateIssuer = false,
+                       ValidateAudience = false,
+                       ValidateLifetime = true,
+                       ValidateIssuerSigningKey = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt: key"])),
+                       ClockSkew = TimeSpan.Zero
+                   });
 
             services.AddEntityFrameworkCosmos();
             services.AddDbContext<HPDbContext>(options => options.UseCosmos(
@@ -66,7 +81,7 @@ namespace HakkuPaysaAPI
             app.UseCors("DefaultPolicy");
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

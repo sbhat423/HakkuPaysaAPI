@@ -16,8 +16,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace HakkuPaysaAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;

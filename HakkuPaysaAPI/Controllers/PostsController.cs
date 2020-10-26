@@ -37,7 +37,7 @@ namespace HakkuPaysaAPI.Controllers
         public async Task CreatePost([FromBody] Post post)
         {
             post.Id = new Guid();
-            if (!string.IsNullOrWhiteSpace(post.Pic)) 
+            if (!string.IsNullOrWhiteSpace(post.Pic))
             {
                 try
                 {
@@ -51,6 +51,32 @@ namespace HakkuPaysaAPI.Controllers
             }
             await _dbContext.AddAsync<Post>(post);
             await _dbContext.SaveChangesAsync();
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeletePost([FromRoute] Guid id)
+        {
+            var post = await _dbContext.Posts.FirstOrDefaultAsync<Post>(p => p.Id == id);
+
+            if (post == null)
+            {
+                return BadRequest($"Post with Id {id} not found");
+            }
+            else 
+            {
+                var res = _dbContext.Remove<Post>(post);
+                if (res != null)
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return Ok();
+                }
+                else 
+                {
+                    return BadRequest("Failed to delete the provided post");
+                }
+            }
+
         }
     }
 }

@@ -53,15 +53,27 @@ namespace HakkuPaysaAPI.Controllers
             await _dbContext.SaveChangesAsync();
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeletePost([FromRoute] Guid id)
+        [HttpGet]
+        [Route("{Id}")]
+        public async Task<IActionResult> GetPosts([FromRoute] Guid Id)
         {
-            var post = await _dbContext.Posts.FirstOrDefaultAsync<Post>(p => p.Id == id);
+            var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == Id);
+            if (post == null)
+            {
+                return BadRequest($"Post does not exist for the Id {Id}");
+            }
+            return Ok(post);
+        }
+
+        [HttpDelete]
+        [Route("{Id}")]
+        public async Task<IActionResult> DeletePost([FromRoute] Guid Id)
+        {
+            var post = await _dbContext.Posts.FirstOrDefaultAsync<Post>(p => p.Id == Id);
 
             if (post == null)
             {
-                return BadRequest($"Post with Id {id} not found");
+                return BadRequest($"Post with Id {Id} not found");
             }
             else 
             {

@@ -65,6 +65,25 @@ namespace HakkuPaysaAPI.Controllers
             return Ok(post);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdatePost([FromBody] Post Post)
+        {
+            var existingPost = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == Post.Id);
+            if (existingPost == null)
+            {
+                return BadRequest($"Post does not exist for the Id {Post.Id}");
+            }
+            existingPost.Pic = Post.Pic;
+            existingPost.Summary = Post.Summary;
+            existingPost.Title = Post.Title;
+            existingPost.User = Post.User;
+
+            _dbContext.Posts.Update(existingPost);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(existingPost);
+        }
+
         [HttpDelete]
         [Route("{Id}")]
         public async Task<IActionResult> DeletePost([FromRoute] Guid Id)

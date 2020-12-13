@@ -77,6 +77,8 @@ namespace HakkuPaysaAPI.Controllers
             existingPost.Summary = Post.Summary;
             existingPost.Title = Post.Title;
             existingPost.User = Post.User;
+            // remove it after adding the Comments controller
+            existingPost.Comments = Post.Comments;
 
             _dbContext.Posts.Update(existingPost);
             await _dbContext.SaveChangesAsync();

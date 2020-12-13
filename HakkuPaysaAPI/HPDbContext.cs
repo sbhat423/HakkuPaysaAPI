@@ -1,4 +1,5 @@
-﻿using HakkuPaysaAPI.Entities;
+﻿using HakkuPaysaAPI.DTOs;
+using HakkuPaysaAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,12 @@ namespace HakkuPaysaAPI
         : base(options)
         {
             this.Database.EnsureCreated();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Post>().ToContainer("HPDbContext").OwnsMany<Comment>(p => p.Comments);
+        
         }
 
         public DbSet<Post> Posts { get; set; }

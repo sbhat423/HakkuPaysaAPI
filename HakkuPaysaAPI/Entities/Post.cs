@@ -13,6 +13,7 @@ namespace HakkuPaysaAPI.Entities
         public string User { get; set; }
         public string Summary { get; set; }
         public string Pic { get; set; }
+        public int? Likes { get; set; }
         public IList<Comment> Comments { get; set; }
     }
 }

@@ -43,6 +43,7 @@ namespace HakkuPaysaAPI.Controllers
                 {
                     var path = await _fileStorageService.SaveFile(Convert.FromBase64String(post.Pic), "png", "posts");
                     post.Pic = path;
+                    post.Likes = 0;
                 }
                 catch (Exception ex)
                 {
@@ -77,6 +78,7 @@ namespace HakkuPaysaAPI.Controllers
             existingPost.Summary = Post.Summary;
             existingPost.Title = Post.Title;
             existingPost.User = Post.User;
+            existingPost.Likes = Post.Likes;
             // remove it after adding the Comments controller
             existingPost.Comments = Post.Comments;
 

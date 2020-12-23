@@ -65,7 +65,7 @@ namespace HakkuPaysaAPI
                 )
             );
             services.AddScoped<IFileStorageService, AzureStorageService>();
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

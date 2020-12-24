@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HakkuPaysaAPI.DTOs;
+using HakkuPaysaAPI.DTOs.Post;
 using HakkuPaysaAPI.Entities;
 using HakkuPaysaAPI.Services.FileStorage;
 using Microsoft.AspNetCore.Mvc;
@@ -29,55 +31,52 @@ namespace HakkuPaysaAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
-            var res = await _dbContext.Posts.ToListAsync();
+            var res = await _dbContext.Posts.Select((post) => post.ToDto()).ToListAsync();
             return Ok(res);
         }
 
         [HttpPost]
-        public async Task CreatePost([FromBody] Post post)
+        public async Task CreatePost([FromBody] PostForCreateDto postForCreateDto)
         {
-            post.Id = new Guid();
-            if (!string.IsNullOrWhiteSpace(post.Pic))
-            {
-                try
-                {
-                    var path = await _fileStorageService.SaveFile(Convert.FromBase64String(post.Pic), "png", "posts");
-                    post.Pic = path;
-                    post.Likes = 0;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message, ex);
-                }
-            }
+            var post = new Post();
+            post.CreatedOn = postForCreateDto.CreatedOn;
+            post.UpdatedOn = postForCreateDto.CreatedOn;
+            post.Title = postForCreateDto.Title;
+            post.Authorname = postForCreateDto.Authorname;
+            post.Summary = postForCreateDto.Summary;
+            post.Pic = null;
+            post.Likes = 0;
+            post.Comments = new List<Comment>();
+            
             await _dbContext.AddAsync<Post>(post);
             await _dbContext.SaveChangesAsync();
         }
 
         [HttpGet]
         [Route("{Id}")]
-        public async Task<IActionResult> GetPosts([FromRoute] Guid Id)
+        public async Task<IActionResult> GetPosts([FromRoute] string Id)
         {
             var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == Id);
             if (post == null)
             {
                 return BadRequest($"Post does not exist for the Id {Id}");
             }
-            return Ok(post);
+            return Ok(post.ToDto());
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePost([FromBody] Post Post)
+        [Route("{Id}")]
+        public async Task<IActionResult> UpdatePost([FromBody] PostForUpdateDto Post, [FromRoute] string Id)
         {
-            var existingPost = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == Post.Id);
+            var existingPost = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == Id);
             if (existingPost == null)
             {
                 return BadRequest($"Post does not exist for the Id {Post.Id}");
             }
+            existingPost.UpdatedOn = Post.UpdatedOn;
             existingPost.Pic = Post.Pic;
             existingPost.Summary = Post.Summary;
             existingPost.Title = Post.Title;
-            existingPost.User = Post.User;
             existingPost.Likes = Post.Likes;
             // remove it after adding the Comments controller
             existingPost.Comments = Post.Comments;
@@ -90,7 +89,7 @@ namespace HakkuPaysaAPI.Controllers
 
         [HttpDelete]
         [Route("{Id}")]
-        public async Task<IActionResult> DeletePost([FromRoute] Guid Id)
+        public async Task<IActionResult> DeletePost([FromRoute] string Id)
         {
             var post = await _dbContext.Posts.FirstOrDefaultAsync<Post>(p => p.Id == Id);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,8 +8,9 @@ namespace HakkuPaysaAPI.DTOs
 {
     public class Comment
     {
-        public Guid PostId { get; set; }
-        public Guid CommentId { get; set; }
+        public string PostId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string CommentId { get; set; }
         public string AuthorId { get; set; }
         public string Text { get; set; }
         public DateTime CommentedOn { get; set; }

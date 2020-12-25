@@ -23,7 +23,7 @@ namespace HakkuPaysaAPI.Utilities
 
 
 
-            if (_paginationOption.Order == Order.Desc)
+            if (_paginationOption.OrderByCreation == Order.Desc)
             {
                 var reversedOrder = results.OrderByDescending(p => p.CreatedOn);
                 pagedResult = await reversedOrder.Skip(_paginationOption.PageSize * _paginationOption.PageNumber)

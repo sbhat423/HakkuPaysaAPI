@@ -19,14 +19,16 @@ namespace HakkuPaysaAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Store comments within the posts for now.
-            modelBuilder.Entity<Post>().ToContainer("Posts").OwnsMany<Comment>(p => p.Comments);
+
+            // Posts
+            modelBuilder.Entity<Post>().ToContainer("Posts");
+            modelBuilder.Entity<Post>().OwnsMany<Comment>(p => p.Comments);
+            modelBuilder.Entity<Post>().OwnsOne<Author>(p => p.Author);
+
+            // UserProfiles
             modelBuilder.Entity<UserProfile>().ToContainer("UserProfiles");
             modelBuilder.Entity<UserProfile>().OwnsOne(ud => ud.Address);
             modelBuilder.Entity<UserProfile>().OwnsOne(ud => ud.Contact);
-
-            // odelBuilder.Entity<Comment>().ToContainer("Comments");
-
-
         }
 
         public DbSet<Post> Posts { get; set; }

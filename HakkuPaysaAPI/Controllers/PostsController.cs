@@ -53,10 +53,10 @@ namespace HakkuPaysaAPI.Controllers
             post.CreatedOn = postForCreateDto.CreatedOn;
             post.UpdatedOn = postForCreateDto.CreatedOn;
             post.Title = postForCreateDto.Title;
-            post.Username = postForCreateDto.Username;
             post.Summary = postForCreateDto.Summary;
             post.Likes = 0;
             post.Comments = new List<Comment>();
+            post.Author = postForCreateDto.Author;
 
             if (!string.IsNullOrWhiteSpace(postForCreateDto.Pic))
             {

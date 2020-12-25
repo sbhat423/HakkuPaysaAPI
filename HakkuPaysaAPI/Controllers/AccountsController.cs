@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using HakkuPaysaAPI.DTOs;
+using HakkuPaysaAPI.Entities;
 using HakkuPaysaAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -23,15 +24,18 @@ namespace HakkuPaysaAPI.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly HakkuPayasaDbContext _dbContext;
 
         public AccountsController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            HakkuPayasaDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         [HttpPost("Create")]
@@ -46,6 +50,19 @@ namespace HakkuPaysaAPI.Controllers
             var result = await _userManager.CreateAsync(user, userInfo.Password);
             if (result.Succeeded)
             {
+                var userProfile = new UserProfile();
+                userProfile.Username = userInfo.Email;
+                userProfile.ProfilePic = "https://u.cubeupload.com/adsuri/7NQDHz.jpeg";
+
+                try
+                {
+                    _dbContext.Users.Add(userProfile);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch
+                {
+                    return BadRequest("Failed to create user profile");
+                }
                 return BuildToken(userInfo);
             }
             else 

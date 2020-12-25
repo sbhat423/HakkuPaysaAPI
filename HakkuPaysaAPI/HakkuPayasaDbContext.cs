@@ -30,6 +30,7 @@ namespace HakkuPaysaAPI
         }
 
         public DbSet<Post> Posts { get; set; }
+        public DbSet<UserProfile> Users { get; set; }
         // public DbSet<Comment> Comments { get; set; }
 
     }

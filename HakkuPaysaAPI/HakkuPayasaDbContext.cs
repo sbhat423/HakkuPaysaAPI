@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace HakkuPaysaAPI
 {
-    public class HPDbContext : DbContext
+    public class HakkuPayasaDbContext : DbContext
     {
-        public HPDbContext(DbContextOptions<HPDbContext> options)
+        public HakkuPayasaDbContext(DbContextOptions<HakkuPayasaDbContext> options)
         : base(options)
         {
             this.Database.EnsureCreated();
@@ -18,11 +18,15 @@ namespace HakkuPaysaAPI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Post>().ToContainer("HPDbContext").OwnsMany<Comment>(p => p.Comments);
-        
+            // Store comments within the posts for now.
+            modelBuilder.Entity<Post>().ToContainer("Posts").OwnsMany<Comment>(p => p.Comments);
+            // odelBuilder.Entity<Comment>().ToContainer("Comments");
+
+
         }
 
         public DbSet<Post> Posts { get; set; }
+        // public DbSet<Comment> Comments { get; set; }
 
     }
 }

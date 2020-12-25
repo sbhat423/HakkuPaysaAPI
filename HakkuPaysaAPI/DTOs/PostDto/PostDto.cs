@@ -11,7 +11,7 @@ namespace HakkuPaysaAPI.DTOs.Post
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
         public string Title { get; set; }
-        public string Authorname { get; set; }
+        public string Username { get; set; }
         public string Summary { get; set; }
         public string Pic { get; set; }
         public int? Likes { get; set; }

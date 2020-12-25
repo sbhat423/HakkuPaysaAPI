@@ -9,7 +9,7 @@ namespace HakkuPaysaAPI.DTOs
     {
         public string Title { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string Authorname { get; set; }
+        public string Username { get; set; }
         public string Summary { get; set; }
         public string Pic { get; set; }
     }

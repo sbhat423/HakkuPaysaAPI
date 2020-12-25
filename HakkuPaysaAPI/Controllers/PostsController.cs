@@ -18,10 +18,10 @@ namespace HakkuPaysaAPI.Controllers
     public class PostsController : ControllerBase
     {
         private readonly ILogger<PostsController> _logger;
-        private readonly HPDbContext _dbContext;
+        private readonly HakkuPayasaDbContext _dbContext;
         private readonly IFileStorageService _fileStorageService;
 
-        public PostsController(ILogger<PostsController> logger, HPDbContext dbContext, IFileStorageService fileStorageService)
+        public PostsController(ILogger<PostsController> logger, HakkuPayasaDbContext dbContext, IFileStorageService fileStorageService)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -42,7 +42,7 @@ namespace HakkuPaysaAPI.Controllers
             post.CreatedOn = postForCreateDto.CreatedOn;
             post.UpdatedOn = postForCreateDto.CreatedOn;
             post.Title = postForCreateDto.Title;
-            post.Authorname = postForCreateDto.Authorname;
+            post.Username = postForCreateDto.Username;
             post.Summary = postForCreateDto.Summary;
             post.Pic = null;
             post.Likes = 0;

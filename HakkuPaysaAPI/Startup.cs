@@ -58,7 +58,7 @@ namespace HakkuPaysaAPI
                    });
 
             services.AddEntityFrameworkCosmos();
-            services.AddDbContext<HPDbContext>(options => options.UseCosmos(
+            services.AddDbContext<HakkuPayasaDbContext>(options => options.UseCosmos(
                     Configuration["CosmosDb:EndpointUrl"],
                     Configuration["CosmosDb:PrivateKey"],
                     Configuration["CosmosDb:DbName"]

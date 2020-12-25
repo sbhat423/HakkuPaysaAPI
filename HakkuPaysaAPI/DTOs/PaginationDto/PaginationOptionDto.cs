@@ -9,8 +9,7 @@ namespace HakkuPaysaAPI.DTOs.PaginationDto
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public Order Order { get; set; }
-        public string OrderOnProperty { get; set; }
+        public Order OrderByCreation { get; set; }
     }
 
     public enum Order {

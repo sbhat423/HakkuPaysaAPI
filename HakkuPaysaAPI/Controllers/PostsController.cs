@@ -55,10 +55,22 @@ namespace HakkuPaysaAPI.Controllers
             post.Title = postForCreateDto.Title;
             post.Username = postForCreateDto.Username;
             post.Summary = postForCreateDto.Summary;
-            post.Pic = null;
             post.Likes = 0;
             post.Comments = new List<Comment>();
-            
+
+            if (!string.IsNullOrWhiteSpace(postForCreateDto.Pic))
+            {
+                try
+                {
+                    var path = await _fileStorageService.SaveFile(Convert.FromBase64String(postForCreateDto.Pic), "png", "posts");
+                    post.Pic = path;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message, ex);
+                }
+            }
+
             await _dbContext.AddAsync<Post>(post);
             await _dbContext.SaveChangesAsync();
         }

@@ -22,7 +22,7 @@ namespace HakkuPaysaAPI
 
             // Posts
             modelBuilder.Entity<Post>().ToContainer("Posts");
-            modelBuilder.Entity<Post>().OwnsMany<Comment>(p => p.Comments);
+            modelBuilder.Entity<Post>().OwnsMany<Comment>(p => p.Comments).OwnsOne(c => c.Author);
             modelBuilder.Entity<Post>().OwnsOne<Author>(p => p.Author);
 
             // UserProfiles

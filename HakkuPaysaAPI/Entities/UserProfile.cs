@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HakkuPaysaAPI.DTOs.UserProfileDto;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,5 +19,17 @@ namespace HakkuPaysaAPI.Entities
         public string Intro { get; set; }
         public Address Address { get; set; }
         public Contact Contact { get; set; }
+        public UserProfileDto ToDto() => new UserProfileDto()
+        {
+            Id = Id,
+            Username = Username,
+            Displayname = Displayname,
+            ProfilePic = ProfilePic,
+            Status = Status,
+            DOB = DOB,
+            Intro = Intro,
+            Address = Address,
+            Contact = Contact
+        };
     }
 }

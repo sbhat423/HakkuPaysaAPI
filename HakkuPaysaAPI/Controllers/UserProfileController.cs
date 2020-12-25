@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HakkuPaysaAPI.DTOs.UserProfileDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -28,7 +29,25 @@ namespace HakkuPaysaAPI.Controllers
         {
             // Username is separate from userId but unique. UserId is not used as I need to find a way to get it from the Indentity to PWA
             var userProfile = await _dbContext.Users.FirstOrDefaultAsync((user) => user.Username == Username);
-            return Ok(userProfile);
+            return Ok(userProfile.ToDto());
+        }
+
+        [HttpPut]
+        [Route("{Username}")]
+        public async Task<IActionResult> GetUserProfile([FromBody] UserProfileForUpdateDto profileForUpdate,[FromRoute] string Username)
+        {
+            var existingProfile = await _dbContext.Users.FirstOrDefaultAsync((user) => user.Username == Username);
+
+            existingProfile.Displayname = profileForUpdate.Displayname;
+            existingProfile.ProfilePic = profileForUpdate.ProfilePic;
+            existingProfile.Status = profileForUpdate.Status;
+            existingProfile.DOB = profileForUpdate.DOB;
+            existingProfile.Intro = profileForUpdate.Intro;
+
+            _dbContext.Users.Update(existingProfile);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(existingProfile);
         }
     }
 }

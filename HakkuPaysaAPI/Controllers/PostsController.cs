@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HakkuPaysaAPI.DTOs;
+using HakkuPaysaAPI.DTOs.PaginationDto;
 using HakkuPaysaAPI.DTOs.Post;
 using HakkuPaysaAPI.Entities;
 using HakkuPaysaAPI.Services.FileStorage;
+using HakkuPaysaAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -32,6 +34,15 @@ namespace HakkuPaysaAPI.Controllers
         public async Task<IActionResult> GetPosts()
         {
             var res = await _dbContext.Posts.Select((post) => post.ToDto()).ToListAsync();
+            return Ok(res);
+        }
+
+        [HttpPost]
+        [Route("paginated")]
+        public async Task<IActionResult> GetPosts([FromBody] PaginationOptionDto paginationOption)
+        {
+            var paginator = new Paginator(paginationOption);
+            var res = await paginator.GetPagedResult(_dbContext.Posts);
             return Ok(res);
         }
 

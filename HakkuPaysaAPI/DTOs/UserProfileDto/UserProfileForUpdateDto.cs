@@ -8,7 +8,8 @@ namespace HakkuPaysaAPI.DTOs.UserProfileDto
 {
     public class UserProfileForUpdateDto
     {
-        public string Displayname { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string ProfilePic { get; set; }
         public string Status { get; set; }
         public DateTime DOB { get; set; }

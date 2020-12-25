@@ -38,7 +38,8 @@ namespace HakkuPaysaAPI.Controllers
         {
             var existingProfile = await _dbContext.Users.FirstOrDefaultAsync((user) => user.Username == Username);
 
-            existingProfile.Displayname = profileForUpdate.Displayname;
+            existingProfile.FirstName = profileForUpdate.FirstName;
+            existingProfile.LastName = profileForUpdate.LastName;
             existingProfile.ProfilePic = profileForUpdate.ProfilePic;
             existingProfile.Status = profileForUpdate.Status;
             existingProfile.DOB = profileForUpdate.DOB;

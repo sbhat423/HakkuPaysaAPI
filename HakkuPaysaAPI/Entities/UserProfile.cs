@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HakkuPaysaAPI.Entities
 {
-    public class UserDetails
+    public class UserProfile
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }

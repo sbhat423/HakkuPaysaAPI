@@ -20,6 +20,10 @@ namespace HakkuPaysaAPI
         {
             // Store comments within the posts for now.
             modelBuilder.Entity<Post>().ToContainer("Posts").OwnsMany<Comment>(p => p.Comments);
+            modelBuilder.Entity<UserDetails>().ToContainer("Users");
+            modelBuilder.Entity<UserDetails>().OwnsOne(ud => ud.Address);
+            modelBuilder.Entity<UserDetails>().OwnsOne(ud => ud.Contact);
+
             // odelBuilder.Entity<Comment>().ToContainer("Comments");
 
 

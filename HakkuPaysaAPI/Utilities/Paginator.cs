@@ -17,32 +17,31 @@ namespace HakkuPaysaAPI.Utilities
             _paginationOption = PaginationOption;
         }
 
-        public async Task<IEnumerable<Post>> GetPagedResult(DbSet<Post> results) 
+        public async Task<IEnumerable<T>> GetPagedResult<T>(DbSet<T> results) where T: class, IBaseEntity
         {
-            IQueryable<Post> pagedResult;
-            IEnumerable<Post> res;
+            IEnumerable<T> pagedResult;
 
-            // Type myType = typeof(T);
-            // Get the PropertyInfo object by passing the property name.
-            // PropertyInfo myPropInfo = myType.GetProperty(_paginationOption.OrderOnProperty);
 
-            if (_paginationOption.Order == Order.Desc) 
+
+            if (_paginationOption.Order == Order.Desc)
             {
-                pagedResult = results
-                    .OrderByDescending(p => p.CreatedOn)
-                    .Skip(_paginationOption.PageSize * _paginationOption.PageNumber)
-                    .Take(_paginationOption.PageSize);
-                res = await pagedResult.ToListAsync();
+                var reversedOrder = results.OrderByDescending(p => p.CreatedOn);
+                pagedResult = await reversedOrder.Skip(_paginationOption.PageSize * _paginationOption.PageNumber)
+                    .Take(_paginationOption.PageSize).ToListAsync();
 
             }
+            else 
+            {
+                pagedResult = await results
+                    .Skip(_paginationOption.PageSize * _paginationOption.PageNumber)
+                    .Take(_paginationOption.PageSize).ToListAsync();
+            }
 
-            pagedResult = results
-                .Skip(_paginationOption.PageSize * _paginationOption.PageNumber)
-                .Take(_paginationOption.PageSize);
-            res = await pagedResult.ToListAsync();
 
-            return res;
+            return pagedResult;
 
         }
+
+        
     }
 }

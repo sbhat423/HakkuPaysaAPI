@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HakkuPaysaAPI.Entities
 {
-    public class Post
+    public class Post: IBaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }

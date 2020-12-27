@@ -37,6 +37,14 @@ namespace HakkuPaysaAPI.Controllers
             return Ok(res);
         }
 
+        [HttpGet]
+        [Route("mine/{Username}")]
+        public async Task<IActionResult> GetMyPosts([FromRoute] string Username)
+        {
+            var res = await _dbContext.Posts.Where(p => p.Author.Username == Username).Select((post) => post.ToDto()).ToListAsync();
+            return Ok(res);
+        }
+
         [HttpPost]
         [Route("paginated")]
         public async Task<IActionResult> GetPosts([FromBody] PaginationOptionDto paginationOption)
